@@ -14,8 +14,9 @@
       //points scripts
       var marker = null
       var image = '1.png';
-      var a = [];
+      var points_array = new Array();
       var clust = 0;
+      var i = 0;
       function initialize() {
         document.getElementById("routes_wrapper").style.display = "none";
         var myOptions = {
@@ -27,24 +28,20 @@
             myOptions);
 
         google.maps.event.addListener(map, 'click', function(e) {
+          var temp = new Array(2);
+          temp[0] = e.latLng.lat();
+          temp[1] = e.latLng.lng();
+          points_array[i++] = temp;
+          //alert(points_array)
           placeMarker(e.latLng, map);
         });
       }
 
       function placeMarker(position, map) {
-        if(marker){
-          marker.setMap(map)
-          marker.position = position;
-        }
-        else{
-          
         marker = new google.maps.Marker({
           position: position,
           map: map,
-          icon: image
         });
-      }
-        map.panTo(position);
       }
 
       function points_submitted() {
@@ -53,6 +50,7 @@
         document.getElementById("cluster_input").style.display = "none"
         document.getElementById("routes_wrapper").style.display = "block";
        // document.getElementById("routes_map_canvas").style.display = "block";
+
         initializeRoutes();
       }
 
@@ -83,17 +81,22 @@
         google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
           computeTotalDistance(directionsDisplay.directions);
         });
-
+        document.getElementById("total").innerHTML = points_array;
         calcRoute();
       }
 
       function calcRoute() {
-
+        var points_string_array = new Array();
+        var way = []
+        for(j = 0; j<points_array.length; j++){
+          way.push({location: points_array[j][0] + "," + points_array[j][1]});
+        }
         var request = {
-          origin: "12.969933,77.585077",
-          destination: "12.969933,77.585077",
+          origin: "12.8904659,77.5981464",
+          destination: "12.8904659,77.5981464",
           optimizeWaypoints: true,
-          waypoints:[{location: "12.976289,77.61117"}, {location: "12.927105,77.669706"},{location: "12.953539,77.700434"}, {location: "12.918405,77.609282"}],
+          waypoints:way,
+
           travelMode: google.maps.TravelMode.DRIVING
         };
         directionsService.route(request, function(response, status) {
@@ -121,10 +124,11 @@
         Number of groups<input id='clusters_num' type='text' name='clusters' value=''> 
         <input type='button' onClick='points_submitted()'>
     </div>
-    <div id = 'routes_wrapper' style="width:100%; height:100%">>
+    <div id = 'routes_wrapper' style="width:100%; height:100%">
        <div id="routes_map_canvas" style="float:left;width:70%; height:100%"></div>
        <div id="directionsPanel" style="float:right;width:30%;height 100%"></div>
         <div id="total" ></div>
+        <div id="points" />
 
     </div>
 
