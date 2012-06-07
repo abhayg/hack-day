@@ -7,9 +7,12 @@
       body { height: 100%; margin: 0; padding: 0 }
       #points_map_canvas { height: 100% }
     </style>
+    <script type = "text/javascript" src = "jquery.js">
+    </script>
     <script type="text/javascript"
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBYLUwdESKNnJDs2AeI3bhLMhY_wCgfEes&sensor=true">
     </script>
+
     <script type="text/javascript">
       //points scripts
       var marker = null
@@ -82,11 +85,18 @@
           computeTotalDistance(directionsDisplay.directions);
         });
         document.getElementById("total").innerHTML = points_array;
+       
+        $.ajax({
+         url: 'http://172.17.80.112:3901/cluster/get_clusters',
+        type: 'GET',
+          data: {latlng_points: points_array, num_clusters: clust}, // or $('#myform').serializeArray()
+          success: function(response ) { alert('Get completed'); }
+        });
+
         calcRoute();
       }
 
       function calcRoute() {
-        var points_string_array = new Array();
         var way = []
         for(j = 0; j<points_array.length; j++){
           way.push({location: points_array[j][0] + "," + points_array[j][1]});
