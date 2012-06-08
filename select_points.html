@@ -20,6 +20,7 @@
       var points_array = new Array();
       var clust = 0;
       var i = 0;
+      var res_data;
       response = [[[12.8846927682355,77.5850143046631],[12.8846927682355,77.5850143046631],[12.8846927682355,77.5850143046631]],[[12.8846927682355,77.5850143046631],[12.8949839102643,77.5944556803955],[12.8900475615916,77.5947990031494]]];
       function initialize() {
         document.getElementById("routes_wrapper").style.display = "none";
@@ -88,19 +89,42 @@
         });
         document.getElementById("total").innerHTML = points_array;
        
-        $.ajax({
+        /*$.ajax({
           url: 'http://172.17.80.112:3901/cluster/get_clusters',
           type: 'GET',
           data: {latlng_points: points_array, num_clusters: clust}, // or $('#myform').serializeArray()
-          success: function(response ) { alert('Get completed'); }
-        });
+          success: function() { alert('Get completed'); }
+        });*/
+
+        getClusters();
+        //alert(res_data);
         addCombo();
         calcRoute(0);
       }
 
+      function getClusters(){
+        var url = "http://172.17.80.112:3901/cluster/get_clusters?latlng_points[0][]=12.904103349148928&latlng_points[0][]=77.5887050242676&latlng_points[1][]=12.904939978268265&latlng_points[1][]=77.60063548996584&latlng_points[2][]=12.895569572290407&latlng_points[2][]=77.59934802963869&latlng_points[3][]=12.895820569882053&latlng_points[3][]=77.5850143046631&num_clusters=2";
+
+        //var url = "http://172.17.80.112:3901/cluster/get_clusters";
+
+        var client = new XMLHttpRequest();
+
+        client.open("GET", url, false);
+
+        client.data()
+
+        client.send(null);
+        alert(client.status);
+        if (client.status == 200)
+          alert("The request succeeded!\n\nThe response representation was:\n\n" + client.responseText)
+        else
+          alert("The request did not succeed!\n\nThe response status was: " + client.status + " " + client.statusText + ".");
+
+      }
+
       function calcRoute(selection) {
         var way = [];
-        alert(response[selection]);
+        //alert(response[selection]);
         for(j = 0; j<response[selection].length; j++){
           way.push({location: response[selection][j][0] + "," + response[selection][j][1]});
         }
