@@ -30,6 +30,7 @@ public class Clusters {
         }
     	ret.add(outer);
     }
+    //System.out.println(ret);
     return ret;
 }
   
@@ -44,7 +45,7 @@ public class Clusters {
 	}  
   
   public double[][] convertToXY(double[][] latLng){
-	  double data[][] = new double[6][3];
+	  double data[][] = new double[latLng.length][3];
 	  for(int i = 0; i<latLng.length; i++){
 		  data[i][0] = latToY(latLng[i][0]);
 		  data[i][1] = lonToX(latLng[i][1]);

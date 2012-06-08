@@ -159,10 +159,11 @@ public class  Kmeans{
         {
             clusters[k].clear();
         }
- 
+        //System.out.println(dataSize);
         for(int i=0; i<dataSize; i++)
         {
  
+        	//System.out.println("Adding data val idx="+i);
             int clust = 0;
             double dist = Double.MAX_VALUE;
             double newdist = 0;
@@ -176,7 +177,7 @@ public class  Kmeans{
                     dist = newdist;
                 }
             }
- 
+            //System.out.println("Adding data val idx="+i+" to cluster idx="+clust);
             clusters[clust].add(data[i]);
         }
  

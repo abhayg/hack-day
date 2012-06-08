@@ -11,33 +11,38 @@ public class Main {
 		public static double RADIUS = 85445659.4471;
  
       public static void main(String[] args) {
-    	double[][] latlngPoints = {{12.969933,77.585077}, {12.976289,77.61117}, {12.927105,77.669706}, {12.953539,77.700434}, 
-    			{12.918405,77.609282}, {12.972777,77.649794}};  
+    	double[][] latlngPoints = {{12.969933,77.585077}, {12.976289,77.61117}, {12.927105,77.669706}};  
        // double[][] data = {{1d,2d},{2d,4d},{1d,1d},{0d,0d},{2d,5d}, {2d,15d}, {4d,20d}};
         double[][] data = convertToXY(latlngPoints);
-        int numClusters = 5;
+        int numClusters = 2;
  
         Kmeans kmeans = new Kmeans(data, numClusters);
         //kmeans.setEpsilon(0.000001);
         kmeans.calculateClusters();
+        
+        ArrayList ret = new ArrayList();
+        int i = 0;
  
         ArrayList[] clusters = kmeans.getClusters();
         for(ArrayList cluster: clusters)
         {
-            System.out.println("CLUSTER");
+        	ArrayList outer = new ArrayList();
+        	//System.out.println("CLUSTER");
             for(Object dat : cluster)
             {
+            	double[] arr = new double[2];
             	int x = (int)((double[])dat)[2];
-                System.out.print(latlngPoints[x][0] + " "+ latlngPoints[x][1]);
-                System.out.println();
+                //System.out.print(latlngPoints[x][0] + " "+ latlngPoints[x][1]);
+                //System.out.println();
+                arr[0] = latlngPoints[x][0];
+            	arr[1] = latlngPoints[x][1];
+                outer.add(arr);
+                //System.out.println(arr[0] + "     " + arr[1]);
             }
+            ret.add(outer);
         }
- 
-        System.out.println(kmeans.getClusterVars()[0]);
-        System.out.println(kmeans.getClusterVars()[1]);
-        System.out.println(kmeans.getTotalVar());
-        System.out.println(kmeans.getClusterCenters()[0][0] + " " + kmeans.getClusterCenters()[0][1]);
-        System.out.println(kmeans.getClusterCenters()[1][0] + " " + kmeans.getClusterCenters()[1][1]);
+        
+        //System.out.println(ret);
     }
       
       public static double lonToX(double lon) {
@@ -51,7 +56,7 @@ public class Main {
     	}  
       
       public static double[][] convertToXY(double[][] latLng){
-    	  double data[][] = new double[6][3];
+    	  double data[][] = new double[latLng.length][3];
     	  for(int i = 0; i<latLng.length; i++){
     		  data[i][0] = latToY(latLng[i][0]);
     		  data[i][1] = lonToX(latLng[i][1]);
